@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 引入SpringBoot配置文件 -->
+    <properties resource="application.properties"/>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="mergeable" value="false"></property>
+
+
+        <property name="suppressAllComments" value="true"/>
+
+
+        <!--自定义插件  防止xml生成重复代码-->
+        <plugin type="com.weibo.www.generator.OverIsMergeablePlugin" />
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.weibo.www.model" targetProject="src/main/java" />
+
+        <sqlMapGenerator targetPackage="mybatis/mapper" targetProject="src/main/resources"/>
+
+        <!-- 设置自定义的DAO模板 -->
+        <javaClientGenerator type ="XMLMAPPER"
+                             targetPackage="com.weibo.www.auto.daointerface"
+                             implementationPackage="com.weibo.www.auto.ibatis"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table tableName="sys_user" schema="" >
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
+        </table>
+    </context>
+</generatorConfiguration>
